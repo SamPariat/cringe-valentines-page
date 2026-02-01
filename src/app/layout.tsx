@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Dancing_Script, Quicksand } from "next/font/google";
 import "./globals.css";
+import { Suspense } from "react";
 
 const dancingScript = Dancing_Script({
   subsets: ["latin"],
@@ -43,8 +44,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dancingScript.variable} ${quicksand.variable}`}>
-      <body className="antialiased font-body">{children}</body>
+    <html
+      lang="en"
+      className={`${dancingScript.variable} ${quicksand.variable}`}
+    >
+      <body className="antialiased font-body">
+        <Suspense>{children}</Suspense>
+      </body>
     </html>
   );
 }
