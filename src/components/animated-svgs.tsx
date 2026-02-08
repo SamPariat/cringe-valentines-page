@@ -249,10 +249,14 @@ export const FloatingHeartsSVG = ({ isPink = true }: { isPink?: boolean }) => {
         delay: Math.random() * 5,
         duration: 10 + Math.random() * 10,
         color: isPink
-          ? ["#ec4899", "#f472b6", "#f9a8d4", "#fce7f3"][Math.floor(Math.random() * 4)]
-          : ["#3b82f6", "#60a5fa", "#93c5fd", "#dbeafe"][Math.floor(Math.random() * 4)],
+          ? ["#ec4899", "#f472b6", "#f9a8d4", "#fce7f3"][
+              Math.floor(Math.random() * 4)
+            ]
+          : ["#3b82f6", "#60a5fa", "#93c5fd", "#dbeafe"][
+              Math.floor(Math.random() * 4)
+            ],
       })),
-    [isPink]
+    [isPink],
   );
 
   return (
@@ -319,7 +323,11 @@ export const Cupid = ({ size = 100 }: { size?: number }) => (
       fill="white"
       fillOpacity="0.8"
       animate={{ scaleX: [1, 1.1, 1] }}
-      transition={{ duration: 0.5, repeat: Number.POSITIVE_INFINITY, delay: 0.1 }}
+      transition={{
+        duration: 0.5,
+        repeat: Number.POSITIVE_INFINITY,
+        delay: 0.1,
+      }}
     />
     {/* Body */}
     <circle cx="50" cy="55" r="18" fill="#fcd5ce" />
@@ -362,9 +370,20 @@ export const Cupid = ({ size = 100 }: { size?: number }) => (
       <motion.g
         initial={{ x: 0 }}
         animate={{ x: [0, 5, 0] }}
-        transition={{ duration: 0.5, repeat: Number.POSITIVE_INFINITY, repeatDelay: 2 }}
+        transition={{
+          duration: 0.5,
+          repeat: Number.POSITIVE_INFINITY,
+          repeatDelay: 2,
+        }}
       >
-        <line x1="15" y1="65" x2="40" y2="65" stroke="#f472b6" strokeWidth="2" />
+        <line
+          x1="15"
+          y1="65"
+          x2="40"
+          y2="65"
+          stroke="#f472b6"
+          strokeWidth="2"
+        />
         <path d="M40 65L35 60M40 65L35 70" stroke="#f472b6" strokeWidth="2" />
         <path
           d="M42 65c-0.5-1-1.5-1.5-2.5-1.5-1.25 0-2.25 1-2.25 2.25 0 1.5 1.35 2.7 3.4 4.55l1.35 1.2 1.35-1.2c2.05-1.85 3.4-3.05 3.4-4.55 0-1.25-1-2.25-2.25-2.25-1 0-2 0.5-2.5 1.5z"
@@ -389,7 +408,7 @@ export const SparklesBackground = () => {
         delay: Math.random() * 3,
         duration: 2 + Math.random() * 2,
       })),
-    []
+    [],
   );
 
   return (

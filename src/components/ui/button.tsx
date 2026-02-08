@@ -3,7 +3,14 @@ import { cn } from "@/lib/utils";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "outline" | "pink" | "blue" | "glass" | "glassPink" | "glassBlue";
+  variant?:
+    | "default"
+    | "outline"
+    | "pink"
+    | "blue"
+    | "glass"
+    | "glassPink"
+    | "glassBlue";
   size?: "default" | "sm" | "lg" | "xl";
 }
 
@@ -41,7 +48,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       />
     );
-  }
+  },
 );
 Button.displayName = "Button";
 
