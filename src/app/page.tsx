@@ -1,74 +1,57 @@
-"use client";
-
-import { useSearchParams } from "next/navigation";
-import { useCallback, useMemo } from "react";
-import {
-  MissingGenderError,
-  SuccessScreen,
-  ValentineForm,
-} from "@/components/valentine";
+import { redirect } from "next/navigation";
+import { MissingGenderError } from "@/components/valentine";
+import { getValentine } from "@/lib/actions/valentine";
 import { parseGenderParam } from "@/lib/parseGenderParam";
-import { useValentineMachine } from "@/machines";
-import { StrategyProvider, useStrategy } from "@/strategies";
+import { ValentineClient } from "./page.client";
 
-export default function Home() {
-  const searchParams = useSearchParams();
-  const name = searchParams.get("name") || searchParams.get("n") || "";
-  const gender = useMemo(() => parseGenderParam(searchParams), [searchParams]);
+interface HomeProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
 
-  // If no gender provided, show error page
+export default async function Home({ searchParams }: HomeProps) {
+  const params = await searchParams;
+
+  const id = typeof params.id === "string" ? params.id : undefined;
+  const nameParam =
+    typeof params.name === "string"
+      ? params.name
+      : typeof params.n === "string"
+        ? params.n
+        : "";
+  const genderParam =
+    typeof params.gender === "string"
+      ? params.gender
+      : typeof params.g === "string"
+        ? params.g
+        : "";
+
+  if (id) {
+    const valentine = await getValentine(id);
+
+    if (valentine) {
+      if (valentine.accepted_at) {
+        redirect(`/success?id=${id}`);
+      }
+
+      return (
+        <ValentineClient
+          valentine={valentine}
+          name={valentine.recipient_name}
+          gender={valentine.gender}
+        />
+      );
+    }
+  }
+
+  const urlSearchParams = new URLSearchParams();
+  if (genderParam) urlSearchParams.set("gender", genderParam);
+  const gender = parseGenderParam(urlSearchParams);
+
   if (!gender) {
-    return <MissingGenderError recipientName={name.trim() || undefined} />;
+    return <MissingGenderError recipientName={nameParam.trim() || undefined} />;
   }
 
   return (
-    <StrategyProvider gender={gender}>
-      <ValentineContent name={name.trim()} gender={gender} />
-    </StrategyProvider>
+    <ValentineClient valentine={null} name={nameParam.trim()} gender={gender} />
   );
-}
-
-interface ValentineContentProps {
-  readonly name: string;
-  readonly gender: NonNullable<ReturnType<typeof parseGenderParam>>;
-}
-
-function ValentineContent({ name, gender }: ValentineContentProps) {
-  const { state, context, send } = useValentineMachine({
-    initialName: name,
-    initialGender: gender,
-  });
-  const strategy = useStrategy();
-
-  const handleNextQuote = useCallback(() => {
-    send({
-      type: "NEXT_QUOTE",
-      quotesLength: strategy.getQuotes().length,
-    });
-  }, [send, strategy]);
-
-  const handleNo = useCallback(() => {
-    send({
-      type: "CLICK_NO",
-      noMessagesLength: strategy.getNoMessages().length,
-    });
-  }, [send, strategy]);
-
-  if (state.type === "ASKING") {
-    return (
-      <ValentineForm
-        state={state}
-        recipientName={context.recipientName}
-        onYes={() => send({ type: "CLICK_YES" })}
-        onNo={handleNo}
-        onNextQuote={handleNextQuote}
-      />
-    );
-  }
-
-  if (state.type === "ACCEPTED") {
-    return <SuccessScreen recipientName={context.recipientName} />;
-  }
-
-  return null;
 }

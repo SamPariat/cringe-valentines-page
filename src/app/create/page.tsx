@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useTransition } from "react";
 import {
   CreateFormInput,
   GeneratedUrlDisplay,
@@ -9,6 +9,7 @@ import {
 } from "@/components/create";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { createValentine } from "@/lib/actions/valentine";
 import type { Gender } from "@/machines/types";
 
 export default function CreatePage() {
@@ -16,27 +17,38 @@ export default function CreatePage() {
   const [senderName, setSenderName] = useState("");
   const [selectedGender, setSelectedGender] = useState<Gender | null>(null);
   const [generatedUrl, setGeneratedUrl] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
   const handleGenerate = useCallback(() => {
     if (!recipientName.trim() || !selectedGender) return;
 
-    const params = new URLSearchParams();
-    params.set("name", recipientName.trim());
-    params.set("gender", selectedGender);
-    if (senderName.trim()) {
-      params.set("from", senderName.trim());
-    }
+    setError(null);
+    startTransition(async () => {
+      const result = await createValentine({
+        recipientName: recipientName.trim(),
+        senderName: senderName.trim() || undefined,
+        gender: selectedGender,
+      });
 
-    const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    const url = `${baseUrl}/?${params.toString()}`;
-    setGeneratedUrl(url);
+      if ("error" in result) {
+        setError(result.error);
+        return;
+      }
+
+      const baseUrl =
+        typeof window !== "undefined" ? window.location.origin : "";
+      const url = `${baseUrl}/?id=${result.shortId}`;
+      setGeneratedUrl(url);
+    });
   }, [recipientName, senderName, selectedGender]);
 
   const handleReset = useCallback(() => {
     setGeneratedUrl(null);
+    setError(null);
   }, []);
 
-  const isFormValid = recipientName.trim() && selectedGender;
+  const isFormValid = recipientName.trim() && selectedGender && !isPending;
 
   return (
     <div className="min-h-dvh bg-linear-to-br from-violet-500 via-fuchsia-400 to-cyan-400 flex items-center justify-center p-4 sm:p-6 animate-gradient overflow-hidden relative">
@@ -109,6 +121,12 @@ export default function CreatePage() {
                   </div>
                 </fieldset>
 
+                {error && (
+                  <p className="text-red-200 text-sm bg-red-500/20 rounded-lg p-2">
+                    {error}
+                  </p>
+                )}
+
                 <Button
                   variant="pink"
                   size="xl"
@@ -116,7 +134,7 @@ export default function CreatePage() {
                   disabled={!isFormValid}
                   className="w-full mt-4"
                 >
-                  Generate Valentine Link
+                  {isPending ? "Creating..." : "Generate Valentine Link"}
                 </Button>
               </>
             ) : (
