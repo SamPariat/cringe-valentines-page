@@ -1,56 +1,43 @@
 "use client";
 
-import { useCallback } from "react";
 import { useSearchParams } from "next/navigation";
-import { useValentineMachine } from "@/machines";
-import { StrategyProvider, useStrategy } from "@/strategies";
+import { useCallback, useMemo } from "react";
 import {
-  GenderSelection,
+  MissingGenderError,
   SuccessScreen,
   ValentineForm,
 } from "@/components/valentine";
+import { parseGenderParam } from "@/lib/parseGenderParam";
+import { useValentineMachine } from "@/machines";
+import { StrategyProvider, useStrategy } from "@/strategies";
 
 export default function Home() {
   const searchParams = useSearchParams();
   const name = searchParams.get("name") || searchParams.get("n") || "";
+  const gender = useMemo(() => parseGenderParam(searchParams), [searchParams]);
 
-  const { state, context, send } = useValentineMachine(name.trim());
-
-  // Gender selection screen - no strategy needed yet
-  if (state.type === "GENDER_SELECTION") {
-    return (
-      <GenderSelection
-        displayName={name.trim()}
-        onSelect={(gender) => send({ type: "SELECT_GENDER", gender })}
-      />
-    );
+  // If no gender provided, show error page
+  if (!gender) {
+    return <MissingGenderError recipientName={name.trim() || undefined} />;
   }
 
-  // Once gender is selected, wrap in strategy provider
-  if (!context.gender) return null;
-
   return (
-    <StrategyProvider gender={context.gender}>
-      <ValentineContentWithStrategy
-        state={state}
-        context={context}
-        send={send}
-      />
+    <StrategyProvider gender={gender}>
+      <ValentineContent name={name.trim()} gender={gender} />
     </StrategyProvider>
   );
 }
 
-interface ValentineContentWithStrategyProps {
-  readonly state: ReturnType<typeof useValentineMachine>["state"];
-  readonly context: ReturnType<typeof useValentineMachine>["context"];
-  readonly send: ReturnType<typeof useValentineMachine>["send"];
+interface ValentineContentProps {
+  readonly name: string;
+  readonly gender: NonNullable<ReturnType<typeof parseGenderParam>>;
 }
 
-function ValentineContentWithStrategy({
-  state,
-  context,
-  send,
-}: ValentineContentWithStrategyProps) {
+function ValentineContent({ name, gender }: ValentineContentProps) {
+  const { state, context, send } = useValentineMachine({
+    initialName: name,
+    initialGender: gender,
+  });
   const strategy = useStrategy();
 
   const handleNextQuote = useCallback(() => {

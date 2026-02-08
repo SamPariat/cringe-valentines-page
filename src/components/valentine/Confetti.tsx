@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
 import { motion } from "motion/react";
+import { useMemo } from "react";
 
 interface ConfettiProps {
   emojis: string[];

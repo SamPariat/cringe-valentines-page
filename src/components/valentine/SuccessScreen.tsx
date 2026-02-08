@@ -1,15 +1,15 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  FloatingHeartsSVG,
-  SparklesBackground,
   Cupid,
+  FloatingHeartsSVG,
   LoveLetter,
+  SparklesBackground,
 } from "@/components/animated-svgs";
-import { Confetti } from "./Confetti";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useStrategy } from "@/strategies";
+import { Confetti } from "./Confetti";
 
 interface SuccessScreenProps {
   readonly recipientName: string;
@@ -73,7 +73,7 @@ export function SuccessScreen({ recipientName }: SuccessScreenProps) {
             <div className="flex justify-center gap-1 sm:gap-2 mb-6">
               {strategy.getSuccessEmojis().map((emoji, i) => (
                 <motion.span
-                  key={`${emoji}-${i}`}
+                  key={`${emoji}-${i + 1}`}
                   className="text-3xl sm:text-4xl"
                   animate={{ scale: [1, 1.3, 1] }}
                   transition={{

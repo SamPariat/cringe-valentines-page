@@ -1,4 +1,9 @@
-import type { ValentineState, ValentineEvent, ValentineContext } from "./types";
+import type {
+  Gender,
+  ValentineContext,
+  ValentineEvent,
+  ValentineState,
+} from "./types";
 
 const INITIAL_ASKING_STATE: ValentineState = {
   type: "ASKING",
@@ -13,9 +18,23 @@ export function createInitialState(): ValentineState {
   return { type: "GENDER_SELECTION" };
 }
 
+export function createInitialStateWithGender(): ValentineState {
+  return INITIAL_ASKING_STATE;
+}
+
 export function createInitialContext(recipientName = ""): ValentineContext {
   return {
     gender: null,
+    recipientName,
+  };
+}
+
+export function createInitialContextWithGender(
+  recipientName: string,
+  gender: Gender,
+): ValentineContext {
+  return {
+    gender,
     recipientName,
   };
 }

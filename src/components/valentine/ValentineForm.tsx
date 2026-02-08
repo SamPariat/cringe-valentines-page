@@ -1,19 +1,19 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { AnimatePresence, motion } from "motion/react";
+import { useCallback, useEffect } from "react";
 import {
-  FloatingHeartsSVG,
-  SparklesBackground,
   Cupid,
   CupidArrow,
+  FloatingHeartsSVG,
   Rose,
+  SparklesBackground,
 } from "@/components/animated-svgs";
-import { TypewriterText } from "./TypewriterText";
-import { useStrategy } from "@/strategies";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import type { ValentineState } from "@/machines/types";
+import { useStrategy } from "@/strategies";
+import { TypewriterText } from "./TypewriterText";
 
 interface ValentineFormProps {
   readonly state: Extract<ValentineState, { type: "ASKING" }>;

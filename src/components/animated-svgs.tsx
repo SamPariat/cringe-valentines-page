@@ -25,6 +25,7 @@ export const AnimatedHeart = ({
     }}
     transition={{ delay, duration: 0.5, ease: "backOut" }}
   >
+    <title>Heart</title>
     <motion.path
       d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
       animate={{
@@ -56,6 +57,7 @@ export const CupidArrow = ({
     animate={{ x: 0, opacity: 1, rotate: -45 }}
     transition={{ duration: 0.8, ease: "easeOut" }}
   >
+    <title>Cupid Arrow</title>
     {/* Arrow shaft */}
     <motion.line
       x1="10"
@@ -125,6 +127,7 @@ export const Sparkle = ({
       ease: "easeInOut",
     }}
   >
+    <title>Sparkle</title>
     <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
   </motion.svg>
 );
@@ -140,6 +143,7 @@ export const LoveLetter = ({ size = 50 }: { size?: number }) => (
     animate={{ y: 0, opacity: 1 }}
     transition={{ duration: 0.6 }}
   >
+    <title>Love Letter</title>
     {/* Envelope body */}
     <motion.rect
       x="8"
@@ -186,6 +190,7 @@ export const Rose = ({ size = 40 }: { size?: number }) => (
     animate={{ scale: 1, rotate: 0 }}
     transition={{ type: "spring", duration: 0.8 }}
   >
+    <title>Rose</title>
     {/* Stem */}
     <motion.path
       d="M32 64V35"
@@ -285,6 +290,7 @@ export const FloatingHeartsSVG = ({ isPink = true }: { isPink?: boolean }) => {
             viewBox="0 0 24 24"
             fill={heart.color}
           >
+            <title>Heart</title>
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
           </svg>
         </motion.div>
@@ -304,6 +310,7 @@ export const Cupid = ({ size = 100 }: { size?: number }) => (
     animate={{ x: 0, opacity: 1 }}
     transition={{ type: "spring", duration: 1 }}
   >
+    <title>Cupid</title>
     {/* Wings */}
     <motion.ellipse
       cx="30"
@@ -436,6 +443,7 @@ export const SparklesBackground = () => {
             viewBox="0 0 24 24"
             fill="#fbbf24"
           >
+            <title>Sparkle</title>
             <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
           </svg>
         </motion.div>

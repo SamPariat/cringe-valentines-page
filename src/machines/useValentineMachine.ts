@@ -1,19 +1,33 @@
 "use client";
 
-import { useReducer, useCallback } from "react";
+import { useCallback, useReducer } from "react";
+import type {
+  Gender,
+  ValentineContext,
+  ValentineEvent,
+  ValentineState,
+} from "./types";
 import {
-  createInitialState,
   createInitialContext,
+  createInitialContextWithGender,
+  createInitialState,
+  createInitialStateWithGender,
   transition,
 } from "./valentineMachine";
-import type { ValentineState, ValentineEvent, ValentineContext } from "./types";
 
 interface MachineState {
   state: ValentineState;
   context: ValentineContext;
 }
 
-export function useValentineMachine(initialName = "") {
+interface UseValentineMachineOptions {
+  initialName?: string;
+  initialGender?: Gender;
+}
+
+export function useValentineMachine(options: UseValentineMachineOptions = {}) {
+  const { initialName = "", initialGender } = options;
+
   const [{ state, context }, dispatch] = useReducer(
     (current: MachineState, event: ValentineEvent): MachineState => {
       const [newState, newContext] = transition(
@@ -24,8 +38,12 @@ export function useValentineMachine(initialName = "") {
       return { state: newState, context: newContext };
     },
     {
-      state: createInitialState(),
-      context: createInitialContext(initialName),
+      state: initialGender
+        ? createInitialStateWithGender()
+        : createInitialState(),
+      context: initialGender
+        ? createInitialContextWithGender(initialName, initialGender)
+        : createInitialContext(initialName),
     },
   );
 

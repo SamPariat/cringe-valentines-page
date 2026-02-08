@@ -1,9 +1,9 @@
 "use client";
 
-import { createContext, useContext, useMemo, type ReactNode } from "react";
-import type { Gender, GenderStrategy } from "./types";
+import { createContext, type ReactNode, useContext, useMemo } from "react";
 import { FemaleAskerStrategy } from "./FemaleAskerStrategy";
 import { MaleAskerStrategy } from "./MaleAskerStrategy";
+import type { Gender, GenderStrategy } from "./types";
 
 const StrategyContext = createContext<GenderStrategy | null>(null);
 

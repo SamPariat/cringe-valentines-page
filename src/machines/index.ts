@@ -1,12 +1,14 @@
 export type {
   Gender,
-  ValentineState,
-  ValentineEvent,
   ValentineContext,
+  ValentineEvent,
+  ValentineState,
 } from "./types";
+export { useValentineMachine } from "./useValentineMachine";
 export {
-  createInitialState,
   createInitialContext,
+  createInitialContextWithGender,
+  createInitialState,
+  createInitialStateWithGender,
   transition,
 } from "./valentineMachine";
-export { useValentineMachine } from "./useValentineMachine";

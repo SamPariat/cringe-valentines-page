@@ -1,6 +1,6 @@
-import type { GenderStrategy } from "./types";
-import { quotesForHim } from "@/data/quotes/forHim";
 import { noMessagesForHim } from "@/data/messages/noMessagesForHim";
+import { quotesForHim } from "@/data/quotes/forHim";
+import type { GenderStrategy } from "./types";
 
 export class FemaleAskerStrategy implements GenderStrategy {
   readonly gender = "female" as const;
